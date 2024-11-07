@@ -25,3 +25,25 @@ ans: An inline policy is a policy created for a single IAM identity (a user, use
 
 Q: what is customer managed policy?
 ans: You can create standalone policies in your own AWS account that you can attach to principal entities (IAM users, IAM groups, and IAM roles). You create these customer managed policies for your specific use cases, and you can change and update them as often as you like. 
+
+ExecutionRole:
+  Type:AWS:: IAM:Role
+  Properties:
+    AssumeRolePolicyDocument:                                -------> This defines a trust policy, which determines which entities (like AWS services) can assume the role.
+      Version: '2012-10-17"                                  -----> Specifies the version of the policy language to use, here, 2012-10-17 is the default for IAM policies.
+      Statement:                                             -----> Defines one or more statements (rules) in the policy.
+        - Effect: Allow                                      -----> the Principal is the entity that can assume the IAM role.
+          Principal: {service: [lambda.amazonaws.com]}
+          Action: ['sts:AssumeRole']                         ----->When sts:AssumeRole is included in a role's trust policy, it allows the specified principal (e.g., Lambda service) to assume the role and receive temporary security credentials (access key, secret access key, and session token) with the permissions defined in that role.
+   Path:"/"
+   ManagedPolicyARNS:
+        iam:aws:policy/service-role/AWSLambdaVPCaccessExecution
+   Policies:
+      - PolicyName: allow s3 access
+        Version: 2012-10-17
+        Statement:
+          -Effect: Allow
+           Action:
+             - 's3:GetObject'
+           Resource:
+             - "*"
